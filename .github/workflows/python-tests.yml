@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  run-python-tests:
+  run-python-linting-and-tests:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -20,10 +20,13 @@ jobs:
         run: |
           docker-compose up -d --build
 
-      - name: Run tests
+      - name: Run tests & linting
         env:
           COMPOSE_INTERACTIVE_NO_CLI: 1
         run: |
+          docker-compose exec -T api flake8 src
+          docker-compose exec -T api black src --check
+          docker-compose exec -T api isort src --check-only
           docker-compose exec -T api python -m pytest "src/tests"
 
       - name: Stop containers
