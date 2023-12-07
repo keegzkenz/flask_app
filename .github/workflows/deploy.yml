@@ -1,7 +1,7 @@
-name: Python Tests
+name: Deploy
 
 on:
-  pull_request:
+  push:
     branches: [main]
 
 jobs:
